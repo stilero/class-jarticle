@@ -13,12 +13,12 @@
 
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
+jimport('joomla.utilities.date');
 //jimport( 'joomla.html.html.string' );
-JLoader::register('JHTMLString', JPATH_PLATFORM.'/joomla/html/html/string');
 
 class JArticle extends JArticleErrors{
     
-    protected $Article;
+    public $Article;
     public static $JOOMLA_VERSION = '2.5';
     public static $ACCESS_PUBLIC = '1';
     public static $ACCESS_REGISTRED = '2';
@@ -31,6 +31,7 @@ class JArticle extends JArticleErrors{
 
 
     public function __construct($article) {
+        $this->loadDependencies();
         $tempClass = new stdClass();
         foreach ($article as $property => $value) {
             $tempClass->$property = $value;
@@ -41,6 +42,10 @@ class JArticle extends JArticleErrors{
         $tempClass->isPublic = $this->isPublic($article);
         $tempClass->tags = $this->tags($article);
         $this->Article = $tempClass;
+    }
+    
+    protected function loadDependencies(){
+        JLoader::register('JHtmlString', JPATH_ROOT.'/libraries/joomla/html/html/string.php');
     }
     
     public function categoryTitle($article){
@@ -104,7 +109,7 @@ class JArticle extends JArticleErrors{
        return $tags;
     } 
     
-    public function __get($name) {
-        return $this->$name;
-    }
+//    public function __get($name) {
+//        return $this->$name;
+//    }
 }

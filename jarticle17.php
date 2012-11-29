@@ -14,7 +14,7 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
 
-class JArticle30 extends JArticle{
+class JArticle17 extends JArticle{
     
     public static $JOOMLA_VERSION = '1.7';
     public static $ACCESS_PUBLIC = '1';

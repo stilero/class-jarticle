@@ -14,7 +14,7 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
 
-class JArticle30 extends JArticle{
+class JArticle16 extends JArticle{
     
     public static $JOOMLA_VERSION = '1.6';
     public static $ACCESS_PUBLIC = '1';
@@ -39,11 +39,27 @@ class JArticle30 extends JArticle{
     }
     
     public function isPublished($article){
-        return parent::isPublished($article);
+        $isPublished = $article->state == self::$STATE_PUBLISHED ? true : false;
+        if(!$isPublished){
+            return FALSE;
+        }
+        $publishUp = isset($article->publish_up) ? $article->publish_up : '';
+        $publishDown = isset($article->publish_down) ? $article->publish_down : '';
+        if($publishUp == '' ){
+            return false;
+        }
+        $now = JFactory::getDate()->toMySQL();
+        if ( ($publishUp > $now) ){
+            return FALSE;
+        }else if($publishDown < $now && $publishDown != '0000-00-00 00:00:00' && $publishDown!=""){
+            return FALSE;
+        }else {
+            return TRUE;
+        }
     }
     
     public function isPublic($article){
-        return parent::isPublished($article);
+        return parent::isPublic($article);
     }
     
     public function tags($article) {
