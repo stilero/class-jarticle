@@ -91,7 +91,7 @@ class JArticle extends JArticleErrors{
         return $isPublic;
     }
     
-    private function tags($article) {
+    public function tags($article) {
         $metaKeysString = isset($article->metakey) ? $article->metakey : '';
         if($metaKeysString == ""){
             return;
