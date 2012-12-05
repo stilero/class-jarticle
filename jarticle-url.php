@@ -17,7 +17,7 @@ defined('_JEXEC') or die('Restricted access');
 class JArticleUrl{
     
     protected $article;
-
+    protected $routerPath = '/components/com_content/helpers/route.php';
 
     public function __construct($JArticle) {
         $this->article = $JArticle->getArticle();
@@ -111,20 +111,40 @@ class JArticleUrl{
         
     }
     
-    protected function _joomlaSefUrlFromRoute(){
-        require_once(JPATH_SITE.DS.'components'.DS.'com_content'.DS.'helpers'.DS.'route.php');
-        $siteURL = substr(JURI::root(), 0, -1);
-        if(JPATH_BASE == JPATH_ADMINISTRATOR) {
-            // In the back end we need to set the application to the site app instead
-            JFactory::$application = JApplication::getInstance('site');
+    protected function noSlashes($str){
+        $strippedBackSlashes = stripslashes($str);
+        $strippedSlashes = str_replace('/', '', $strippedBackSlashes);
+        return $strippedSlashes;
+    }
+    
+    protected function isInBackend(){
+        $inBackend = false;
+        if($this->noSlashes(JPATH_BASE) == $this->noSlashes(JPATH_ADMINISTRATOR)) {
+            $inBackend = true;
         }
+        return $inBackend;
+    }
+    
+    protected function articleRoute(){
+        require_once(JPATH_SITE.$this->routerPath);
         $catAlias = $this->_categoryAlias();
         $articleSlug = $this->_articleSlug();
         $catSlug = $this->article->catid.':'.$catAlias;
-        $this->_attachSh404SefRouting();
         $articleRoute = JRoute::_( ContentHelperRoute::getArticleRoute($articleSlug, $catSlug) );
+        return $articleRoute;
+    }
+    
+    protected function _joomlaSefUrlFromRoute(){
+        $isInBackend = $this->isInBackend();
+        if($isInBackend) {
+            // In the back end we need to set the application to the site app instead
+            JFactory::$application = JApplication::getInstance('site');
+        }  
+        $this->_attachSh404SefRouting();
+        $articleRoute = $this->articleRoute();
         $sefURI = str_replace(JURI::base(true), '', $articleRoute);
-        if(JPATH_BASE == JPATH_ADMINISTRATOR) {
+        $siteURL = substr(JURI::root(), 0, -1);
+        if($isInBackend) {
             $siteURL = str_replace($siteURL.DS.'administrator', '', $siteURL);
             JFactory::$application = JApplication::getInstance('administrator');
         }
