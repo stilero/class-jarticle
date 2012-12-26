@@ -41,16 +41,16 @@ class K2JArticleUrl15 extends JArticleUrl15{
     
     protected function _categoryAlias(){
         $alias = '';
-        if(isset($this->article->category->alias)){
-            $alias = $this->article->category->alias;
+        if(isset($this->Article->category->alias)){
+            $alias = $this->Article->category->alias;
         }
         return $alias;
     }
     
     protected function _articleAlias(){
         $alias = '';
-        if(isset($this->article->alias)){
-            $alias = $this->article->alias;
+        if(isset($this->Article->alias)){
+            $alias = $this->Article->alias;
         }
         return $alias;
     }
@@ -73,8 +73,8 @@ class K2JArticleUrl15 extends JArticleUrl15{
     }
         
     public function url(){
-        $indexStart = strpos($this->article->link, 'index.php');
-        $url = substr($this->article->link, $indexStart);
+        $indexStart = strpos($this->Article->link, 'index.php');
+        $url = substr($this->Article->link, $indexStart);
         $absUrl = JURI::Root().$url;
         return $absUrl;
         //return $this->_joomlaSefUrlFromRoute();

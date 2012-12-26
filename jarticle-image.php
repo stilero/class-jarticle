@@ -15,9 +15,8 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
 
-class JArticleImage{
+class JArticleImage extends JArticleUrl{
     
-    protected $article;
     protected $imageFirstInContent;
     protected $imageFullText;
     protected $imageIntro;
@@ -28,8 +27,8 @@ class JArticleImage{
      * Easily fetch images from Joomla articles
      * @param Object $JArticle A JArticle initiated Class object
      */
-    public function __construct($JArticle) {
-        $this->article = $JArticle->getArticle();
+    public function __construct($article) {
+        parent::__construct($article);
         $this->fetchAllImages();
     }
     
@@ -67,9 +66,9 @@ class JArticleImage{
             return;
         }
         $texts = array(
-            'text' => $this->article->text, 
-            'full' => $this->article->fulltext, 
-            'intro' => $this->article->introtext);
+            'text' => $this->Article->text, 
+            'full' => $this->Article->fulltext, 
+            'intro' => $this->Article->introtext);
         $images = array();
         foreach ($texts as $key => $text) {
             if($text != ''){

@@ -24,23 +24,23 @@ class K2JArticleUrl extends JArticleUrl{
     
     protected function _categoryAlias(){
         $alias = '';
-        if(isset($this->article->category->alias)){
-            $alias = $this->article->category->alias;
+        if(isset($this->Article->category->alias)){
+            $alias = $this->Article->category->alias;
         }
         return $alias;
     }
     
     protected function _articleAlias(){
         $alias = '';
-        if(isset($this->article->alias)){
-            $alias = $this->article->alias;
+        if(isset($this->Article->alias)){
+            $alias = $this->Article->alias;
         }
         return $alias;
     }
     
     protected function urlFromLink(){
-        $indexStart = strpos($this->article->link, 'index.php');
-        $url = substr($this->article->link, $indexStart);
+        $indexStart = strpos($this->Article->link, 'index.php');
+        $url = substr($this->Article->link, $indexStart);
         $absUrl = JURI::Root().$url;
         return $absUrl;
     }
@@ -49,14 +49,14 @@ class K2JArticleUrl extends JArticleUrl{
         require_once(JPATH_SITE.$this->routerPath);
         $catAlias = $this->_categoryAlias();
         $articleSlug = $this->_articleSlug();
-        $catSlug = $this->article->catid.':'.$catAlias;
+        $catSlug = $this->Article->catid.':'.$catAlias;
         $k2Route = K2HelperRoute::getItemRoute($articleSlug, $catSlug);
         $articleRoute = JRoute::_( $k2Route );
         return $articleRoute;
     }
            
     public function url(){
-        if(isset($this->article->link)){
+        if(isset($this->Article->link)){
             return $this->urlFromLink();
         }
         return $this->_joomlaSefUrlFromRoute();

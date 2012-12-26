@@ -14,13 +14,12 @@
 // no direct access
 defined('_JEXEC') or die('Restricted access'); 
 
-class JArticleUrl{
+class JArticleUrl extends JArticle{
     
-    protected $article;
     protected $routerPath = '/components/com_content/helpers/route.php';
 
-    public function __construct($JArticle) {
-        $this->article = $JArticle->getArticle();
+    public function __construct($article) {
+        parent::__construct($article);
     }
     
     protected function isExtensionInstalled($option){
@@ -44,7 +43,7 @@ class JArticleUrl{
         $query = $db->getQuery(true);
         $query->select('alias');
         $query->from('#__categories');
-        $query->where('id = '.$db->quote($this->article->catid));
+        $query->where('id = '.$db->quote($this->Article->catid));
         $db->setQuery($query);
         $result = $db->loadObject();
         $alias = JFilterOutput::stringURLSafe($result->alias);
@@ -53,17 +52,17 @@ class JArticleUrl{
     
     protected function _articleAlias(){
         jimport( 'joomla.filter.output' );
-        $alias = $this->article->alias;
+        $alias = $this->Article->alias;
         if(empty($alias)) {
             $db =& JFactory::getDBO();
             $query = $db->getQuery(true);
             $query->select('alias');
             $query->from('#__content');
-            $query->where('id='.$db->quote($this->article->id));
+            $query->where('id='.$db->quote($this->Article->id));
             $db->setQuery($query);
             print $query;
             $result = $db->loadObject();
-            $alias = $this->article->title;
+            $alias = $this->Article->title;
             if(!empty($result->alias)){
                 $alias = $result->alias;
             }
@@ -73,7 +72,7 @@ class JArticleUrl{
     }
     
     protected function _articleSlug(){
-        $slug = $this->article->id.':'.$this->_articleAlias();
+        $slug = $this->Article->id.':'.$this->_articleAlias();
         return $slug;
     }
     
@@ -129,7 +128,7 @@ class JArticleUrl{
         require_once(JPATH_SITE.$this->routerPath);
         $catAlias = $this->_categoryAlias();
         $articleSlug = $this->_articleSlug();
-        $catSlug = $this->article->catid.':'.$catAlias;
+        $catSlug = $this->Article->catid.':'.$catAlias;
         $articleRoute = JRoute::_( ContentHelperRoute::getArticleRoute($articleSlug, $catSlug) );
         return $articleRoute;
     }

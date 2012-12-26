@@ -42,7 +42,7 @@ class JArticleUrl15 extends JArticleUrl{
     protected function _categoryAlias(){
         jimport( 'joomla.filter.output' );
         $db =& JFactory::getDBO();
-        $query = $this->buildQuery('alias', '#__categories', 'id', $this->article->catid);
+        $query = $this->buildQuery('alias', '#__categories', 'id', $this->Article->catid);
         $db->setQuery($query);
         $result = $db->loadObject();
         $alias = JFilterOutput::stringURLSafe($result->alias);
@@ -51,14 +51,14 @@ class JArticleUrl15 extends JArticleUrl{
     
     protected function _articleAlias(){
         jimport( 'joomla.filter.output' );
-        $alias = $this->article->alias;
+        $alias = $this->Article->alias;
         if(empty($alias)) {
             $db =& JFactory::getDBO();
-            $query = $this->buildQuery('alias', '#__content', 'id', $this->article->id);
+            $query = $this->buildQuery('alias', '#__content', 'id', $this->Article->id);
             $db->setQuery($query);
             print $query;
             $result = $db->loadObject();
-            $alias = $this->article->title;
+            $alias = $this->Article->title;
             if(!empty($result->alias)){
                 $alias = $result->alias;
             }
